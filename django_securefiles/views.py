@@ -1,19 +1,22 @@
+import os
+
 from django.http import HttpResponse, Http404
 from django.views import View
-import os
 
 from .settings import SECUREFILES_PROTECTED_URL
 from .utils import get_protected_file_path
-from .exceptions import PermissionDeniedError
+
 
 class SecureFileView(View):
     """Generic secure file download view."""
 
-    def has_permission(self, request, file_subpath):
+    @staticmethod
+    def has_permission(request, file_subpath):
         """Override this method to implement permission checks."""
         return request.user.is_authenticated
 
-    def get_file_name(self, file_subpath):
+    @staticmethod
+    def get_file_name(file_subpath):
         """Override if you want a nicer download filename."""
         return os.path.basename(file_subpath)
 
